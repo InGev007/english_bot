@@ -1,34 +1,24 @@
-import openpyxl
-import googletrans
+from aiogram import Bot, types
+from aiogram.dispatcher import Dispatcher
+from aiogram.utils import executor
 import os
 import sqlite3
 
-path = "slova.xlsx"
-wb_obj = openpyxl.load_workbook(path)
-sheet_obj = wb_obj.active
+db.start()
+bot= Bot(token=os.getenv("TOKEN"))
+dp = Dispatcher(bot)
 
-row = sheet_obj.max_row
 
-con = sqlite3.connect("bot.db")
-cur = con.cursor()
-con.executescript("""
-        BEGIN TRANSACTION;
-        CREATE TABLE IF NOT EXISTS 'dictionary' (
-            'id'	INTEGER NOT NULL UNIQUE,
-            'en'	TEXT NOT NULL UNIQUE,
-            'ru'	TEXT,
-            'transcription'	TEXT,
-            'voice'	TEXT,
-            PRIMARY KEY('id' AUTOINCREMENT)
-        );
-        COMMIT;
-        """)
-con.commit
+@dp.message_handler(commands=['start','help','info'])
+async def command_start(message : types.Message):
+    await bot.send_message(message.from_id, dialog.start(comm_name, message.from_id))
+    await message.delete()
+    return
+    
+@dp.message_handler()
+async def echo_send(message : types.Message):
+    return
 
-for i in range(1, row + 1): 
-    cell_obj = sheet_obj.cell(row = i, column = 1) 
-    print(cell_obj.value)
-    res = con.execute('INSERT INTO dictionary (en) VALUES ("%s");'% cell_obj.value)
-    con.commit()
-      
-con.close()
+
+
+executor.start_polling(dp, skip_updates=True) 

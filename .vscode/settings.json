@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "english_bot",
+            "group": "bot",
+            "database": "${workspaceFolder:english_bot}/bot.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

@@ -4,7 +4,10 @@ import random
 def createuser(uid):
     con = sqlite3.connect("bot.db")
     cur = con.cursor()
-    res = con.execute('INSERT INTO users (id,chat) VALUES (%s,%s);'% (uid,0))
+    try:
+        res = con.execute('INSERT INTO users (id,chat) VALUES (%s,%s);'% (uid,0))
+    except:
+        res = con.execute('UPDATE users SET chat=0 WHERE id=%s;'% uid)
     con.commit()
     con.close()
     return

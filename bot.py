@@ -17,7 +17,7 @@ async def command_start(message : types.Message):
     func.createuser(message.from_id)
     await message.answer("Данный бот создан для изучения Английского языка. В нём вы найдете автоматический словарь который поможет вам запомнить основные слова. Набор правил анлийского языка и переводчик.", reply_markup=kb.startmenu)
     await message.delete()
-    
+    return
 @dp.message_handler()
 async def echo_send(message : types.Message):
     state = func.checkstate(message.from_id)
@@ -29,9 +29,12 @@ async def echo_send(message : types.Message):
             await message.answer(text)
             await message.answer("Как переводится: %s"% word[4], reply_markup=kb.learnword(word))
             await message.delete()
+            return
         if message.text=='Переводчик':
             func.setstate(message.from_id, 2)
             await message.answer("Выбери с какого языка на какой переводим", reply_markup=kb.perevodmenu0)
+            await message.delete()
+            return
         if message.text=='Учить правила*(в разработке)':
             await message.delete()
             return
@@ -41,6 +44,7 @@ async def echo_send(message : types.Message):
             func.undolearn(message.from_id)
             await message.answer("Данный бот создан для изучения Английского языка. В нём вы найдете автоматический словарь который поможет вам запомнить основные слова. Набор правил анлийского языка и переводчик.", reply_markup=kb.startmenu)
             await message.delete()
+            return
         else:
             text,answ = func.nextlearn(message.from_id, message.text)
             if answ==0:
@@ -48,6 +52,7 @@ async def echo_send(message : types.Message):
             else:
                 await message.answer(text, reply_markup=kb.learnword(answ))
             await message.delete()
+            return
     elif state==2:
         if message.text=='Англо-Русский':
             func.setstate(message.from_id, 3)
@@ -63,15 +68,18 @@ async def echo_send(message : types.Message):
             func.setstate(message.from_id, 0)
             await message.answer("Данный бот создан для изучения Английского языка. В нём вы найдете автоматический словарь который поможет вам запомнить основные слова. Набор правил анлийского языка и переводчик.", reply_markup=kb.startmenu)
             await message.delete()
+            return
     elif state==3:
         answ = ts.google(message.text, to_language='ru')
         func.setstate(message.from_id, 2)
         await message.answer(answ, reply_markup=kb.perevodmenu0)
         await message.delete()
+        return
     elif state==4:
         answ = ts.google(message.text, to_language='en')
         func.setstate(message.from_id, 2)
         await message.answer(answ, reply_markup=kb.perevodmenu0)
-        await message.delete()   
+        await message.delete()
+        return
 
 executor.start_polling(dp, skip_updates=True) 

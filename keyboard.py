@@ -10,7 +10,7 @@ button4=KeyboardButton('Англо-Русский')
 button5=KeyboardButton('Руско-Английский')
 button6=KeyboardButton('Назад')
 
-startmenu = ReplyKeyboardMarkup().add(
+startmenu = ReplyKeyboardMarkup(one_time_keyboard=True).add(
     button1).add(button2).add(button3)
 
 perevodmenu0=ReplyKeyboardMarkup(one_time_keyboard=True).add(
@@ -22,4 +22,4 @@ def learnword(word):
     b3=KeyboardButton(word[2])
     b4=KeyboardButton(word[3])
     under=KeyboardButton('Назад')
-    return ReplyKeyboardMarkup().add(b1).add(b2).add(b3).add(b4).add(under)
+    return ReplyKeyboardMarkup(one_time_keyboard=True).add(b1).add(b2).add(b3).add(b4).add(under)

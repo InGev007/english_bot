@@ -2,13 +2,13 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import keyboard as kb
-import config as cfg
 import func
 
 import os
 import sqlite3
 
-bot= Bot(token=cfg.token)
+
+bot= Bot(token=os.environ.get('TOKEN'))
 dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
@@ -30,6 +30,7 @@ async def echo_send(message : types.Message):
             await message.delete()
         return
     elif state==1:
+
         return
     await bot.send_message(message.from_id, message.text)
     await message.delete()

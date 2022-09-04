@@ -35,7 +35,7 @@ async def echo_send(message : types.Message):
             await message.answer("Выбери с какого языка на какой переводим", reply_markup=kb.perevodmenu0)
             await message.delete()
             return
-        if message.text=='Учить правила*(в разработке)':
+        if message.text=='Грамматика*(в разработке)':
             await message.delete()
             return
     elif state==1:

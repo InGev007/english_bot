@@ -3,14 +3,15 @@ from aiogram.types import ReplyKeyboardRemove, \
     InlineKeyboardMarkup, InlineKeyboardButton
 
 button1 = KeyboardButton('Учить слова')
-button2 = KeyboardButton('Учить правила*(в разработке)')
-button3 = KeyboardButton('Переводчик')
+button2 = KeyboardButton('Переводчик')
+button3 = KeyboardButton('Грамматика*(в разработке)')
+
 
 button4=KeyboardButton('Англо-Русский')
 button5=KeyboardButton('Руско-Английский')
 button6=KeyboardButton('Назад')
 
-startmenu = ReplyKeyboardMarkup(one_time_keyboard=True).add(
+startmenu = ReplyKeyboardMarkup().add(
     button1).add(button2).add(button3)
 
 perevodmenu0=ReplyKeyboardMarkup(one_time_keyboard=True).add(

@@ -2,12 +2,13 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import keyboard as kb
+import config as cfg
 import func
 
 import os
 import sqlite3
 
-bot= Bot(token="5697881354:AAEleWp6gm-KZRsHLOH2a2kJQ0VU61xAxGQ")
+bot= Bot(token=cfg.token)
 dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])

@@ -1,13 +1,14 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.vscode/
 *.py[cod]
 *$py.class
 
 # C extensions
 *.so
 
-alexvenv/
-
+config.py
+test.py
 # Distribution / packaging
 .Python
 build/

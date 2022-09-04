@@ -30,10 +30,18 @@ async def echo_send(message : types.Message):
             await message.delete()
         return
     elif state==1:
-
-        return
-    await bot.send_message(message.from_id, message.text)
-    await message.delete()
+        if message.text=='Назад':
+            func.setstate(message.from_id, 0)
+            func.undolearn(message.from_id)
+            await message.answer("Данный бот создан для изучения Английского языка. В нём вы найдете автоматический словарь который поможет вам запомнить основные слова. Набор правил анлийского языка и переводчик.", reply_markup=kb.startmenu)
+            await message.delete()
+        else:
+            text,answ = func.nextlearn(message.from_id, message.text)
+            if answ==0:
+                await message.answer(text, reply_markup=kb.startmenu)
+            else:
+                await message.answer(text, reply_markup=kb.learnword(answ))
+            await message.delete()
 
 
 executor.start_polling(dp, skip_updates=True) 

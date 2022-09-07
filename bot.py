@@ -3,6 +3,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import translators as ts
 import os
+import time
 
 import keyboard as kb
 import func

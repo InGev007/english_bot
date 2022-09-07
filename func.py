@@ -10,7 +10,7 @@ def createuser(user):
     #3 - username
     #4 - language_code
 
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     try:
         res = con.execute('INSERT INTO users (id,first_name,last_name,username,language_code,chat,lastactive) VALUES (%s,"%s","%s","%s","%s",%s,%s);'% (user[0],user[1],user[2],user[3],user[4],0,time.time()))
@@ -22,7 +22,7 @@ def createuser(user):
     return
 
 def checkstate(uid):
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('UPDATE users SET lastactive=%s WHERE id=%s;'% (time.time(),uid))
     con.commit()
@@ -32,7 +32,7 @@ def checkstate(uid):
     return res[0]
 
 def setstate(uid,state):
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('UPDATE users SET chat=%s WHERE id=%s;'% (state,uid))
     res=res.fetchone()
@@ -40,7 +40,7 @@ def setstate(uid,state):
     con.close()
 
 def randansw():
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     i1=list(range(1, 1000))
     random.shuffle(i1)
@@ -51,7 +51,7 @@ def randansw():
     return answ
 
 def startlearn(uid):
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('SELECT id FROM dictionary WHERE id NOT IN (SELECT idd FROM tempdict WHERE idu=%s);'% uid)
     res=res.fetchall()
@@ -80,7 +80,7 @@ def startlearn(uid):
     return answ
 
 def nextlearn(uid, text):
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('SELECT ganswer,idd FROM t_dial WHERE idu=%s;'% uid)
     res=res.fetchone()
@@ -120,7 +120,7 @@ def nextlearn(uid, text):
         return ret, answ
 
 def undolearn(uid):
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('DELETE FROM t_dial WHERE idu=%s;'% uid)
     res = con.execute('DELETE FROM tempdict WHERE idu=%s AND ok=0;'% uid)
@@ -132,7 +132,7 @@ def undolearn(uid):
 
 def checkactive(uid):
     times=time.time()
-    con = sqlite3.connect("bot.db")
+    con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res = con.execute('SELECT id FROM users WHERE (lastactive+86400) <= %s AND (lastsend+86400) <= %s AND id!=%s'%(times,times,uid))
     res = res.fetchall()

@@ -4,3 +4,5 @@ services:
   english_bot:
     build: ./
     image: english_bot:latest
+    volumes:
+     - ./db/:/usr/src/db/

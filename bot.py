@@ -22,12 +22,15 @@ async def command_start(message : types.Message):
         return
 @dp.message_handler()
 async def echo_send(message : types.Message):
-    notactive=func.checkactive(message.from_id)
-    if len(notactive)!=0:
-        for e in notactive:
-            func.setstate(e[0], 0)
-            func.undolearn(e[0])
-            bot.send_message(e[0], "Продолжай изучать и повторять слова для успешного запоминания.", reply_markup=kb.startmenu)
+    if (int(time.strftime("%H"))>9)&(int(time.strftime("%H"))<21):
+        notactive=func.checkactive(message.from_id)
+        if len(notactive)!=0:
+            try:
+                for e in notactive:
+                    func.setstate(e[0], 0)
+                    func.undolearn(e[0])
+                    bot.send_message(e[0], "Продолжай изучать и повторять слова для успешного запоминания.", reply_markup=kb.startmenu)
+            except: pass
     if message.from_user.is_bot != True:
         state = func.checkstate(message.from_id)
         if state==0:

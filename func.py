@@ -1,13 +1,22 @@
 import sqlite3
 import random
+import time
 
-def createuser(uid):
+
+def createuser(user):
+    #0 - id
+    #1 - first_name
+    #2 - last_name
+    #3 - username
+    #4 - language_code
+
     con = sqlite3.connect("bot.db")
     cur = con.cursor()
     try:
-        res = con.execute('INSERT INTO users (id,chat) VALUES (%s,%s);'% (uid,0))
-    except:
-        res = con.execute('UPDATE users SET chat=0 WHERE id=%s;'% uid)
+        res = con.execute('INSERT INTO users (id,first_name,last_name,username,language_code,chat,lastactive) VALUES (%s,"%s","%s","%s","%s",%s,%s);'% (user[0],user[1],user[2],user[3],user[4],0,time.time()))
+    except Exception as e:
+        print(e)
+        res = con.execute('UPDATE users SET chat=0 WHERE id=%s;'% user[0])
     con.commit()
     con.close()
     return
@@ -15,9 +24,10 @@ def createuser(uid):
 def checkstate(uid):
     con = sqlite3.connect("bot.db")
     cur = con.cursor()
+    res = con.execute('UPDATE users SET lastactive=%s WHERE id=%s;'% (time.time(),uid))
+    con.commit()
     res = con.execute('SELECT chat FROM users WHERE id=%s;'% uid)
     res=res.fetchone()
-    con.commit()
     con.close()
     return res[0]
 
@@ -83,7 +93,7 @@ def nextlearn(uid, text):
         ret="Правильный ответ. Следующие слово: "
     else:
         res = con.execute('UPDATE tempdict SET good=0,wrong=1 WHERE idd=%s AND idu=%s;'% (idd,uid))
-        ret = "Неправильно. Правильный ответ: " + answ + ". Следующие слово: "
+        ret = "Неправильно. Правильный ответ: " + answ[0] + ". Следующие слово: "
     con.commit()
     res = con.execute('SELECT idd FROM tempdict WHERE idu=%s AND ((good<5 AND ok=0)OR(good<2 AND ok=1)) ORDER BY good;'%uid)
     res=res.fetchall()
@@ -119,3 +129,11 @@ def undolearn(uid):
     con.commit()
     con.close()
     return
+
+def checkactive(uid):
+    times=time.time()
+    con = sqlite3.connect("bot.db")
+    cur = con.cursor()
+    res = con.execute('SELECT id FROM users WHERE (lastactive+86400) <= %s AND (lastsend+86400) <= %s AND id!=%s'%(times,times,uid))
+    res = res.fetchall()
+    return res

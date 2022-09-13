@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-  greet:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,21 @@ jobs:
         run: sudo openvpn --config "./config.ovpn" --log "vpn.log" --daemon
 
       - name: Wait for a VPN connection
-        timeout-minutes: 1
-        run: until ping -c1 192.168.1.221; do sleep 2; done
+        timeout-minutes: 0.5
+        run: until ping -c1 ${{ secrets.SERVER_IP }}; do sleep 5; done
 
+      - name: Setup SSH Key
+      - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      
+      - name: Connect on server from SSH
+      - run: ssh ${{ secrets.SSH_LOGIN }}@${{ secrets.SERVER_IP }}
+      
+      - name: multiple command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_LOGIN }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            whoami
+            ls -al

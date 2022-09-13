@@ -4,5 +4,6 @@ services:
   english_bot:
     build: ./
     image: english_bot:latest
+    restart: always
     volumes:
-     - ./db/:/usr/src/db/
+     - ./db/:/usr/src/app/db/

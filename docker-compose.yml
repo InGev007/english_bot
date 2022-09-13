@@ -6,4 +6,6 @@ services:
     image: english_bot:latest
     restart: always
     volumes:
-     - ./db/:/usr/src/app/db/
+      - ./db/:/usr/src/app/db/
+    environment:
+      - TOKEN

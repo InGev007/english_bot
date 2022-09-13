@@ -1,4 +1,4 @@
-name: Manual workflow
+name: Manual deploy main
 
 
 on:
@@ -34,5 +34,15 @@ jobs:
           username: ${{ secrets.SSH_LOGIN }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            whoami
-            ls -al
+            cd ./docker/english_bot
+            docker-compose down
+            cp ./db/ /tmp -r 
+            cd ..
+            rm -rf ./english_bot
+            git clone https://github.com/InGev007/english_bot.git
+            cd ./english_bot
+            rm -rf ./db
+            mv -t ~/docker/english_bot /tmp/db
+            export TOKEN=${{ secrets.TOKEN_TG }}
+            docker-compose build
+            docker-compose up -d

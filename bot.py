@@ -32,14 +32,15 @@ async def echo_send(message : types.Message):
                     bot.send_message(e[0], "Продолжай изучать и повторять слова для успешного запоминания.", reply_markup=kb.startmenu)
             except: pass
     if message.from_user.is_bot != True:
-        state = func.checkstate(message.from_id)
+        user=[message.from_user.id, message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.language_code]
+        state = func.checkstate(user)
         if state==0:
             if message.text=='Учить слова':
                 func.setstate(message.from_id, 1)
                 word=func.startlearn(message.from_id)
                 text="Тебе необходимо переводить слова. Будет 4 варианта ответа. Слово считается выученным при правильном ответе 5 раз подряд для новых слов и 1 раз для уже выученных. За 1 урок 50 слов. Мы считаем это нормой для 1 дня учёбы. Завтра мы напомним тебе о необходимости продолжить учёбу. Твои результаты мы будем хранить 3дня. Если ты за 3 дня нам не напишешь мы удалим твой прогресс."
                 await message.answer(text)
-                if word[5]==NULL:
+                if word[5]==None:
                     await message.answer("Как переводится: %s"% word[4], reply_markup=kb.learnword(word))
                 else:
                     await message.answer("Как переводится: %s [%s]"%(word[4],word[5]), reply_markup=kb.learnword(word))

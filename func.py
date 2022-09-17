@@ -21,12 +21,16 @@ def createuser(user):
     con.close()
     return
 
-def checkstate(uid):
+def checkstate(user):
     con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
-    res = con.execute('UPDATE users SET lastactive=%s WHERE id=%s;'% (time.time(),uid))
+    res = con.execute('SELECT id FROM users WHERE id=%s;'% (user[0]))
+    res=res.fetchone()
+    if res==None:
+        createuser(user)
+    res = con.execute('UPDATE users SET lastactive=%s WHERE id=%s;'% (time.time(),user[0]))
     con.commit()
-    res = con.execute('SELECT chat FROM users WHERE id=%s;'% uid)
+    res = con.execute('SELECT chat FROM users WHERE id=%s;'% user[0])
     res=res.fetchone()
     con.close()
     return res[0]
@@ -117,7 +121,7 @@ def nextlearn(uid, text):
         con.commit()
         random.shuffle(answ)
         con.close()
-        if res[3]==NULL:
+        if res[3]==None:
             ret=ret+res[0]
         else:
             ret=ret+res[0]+" ["+res[3]+"]"

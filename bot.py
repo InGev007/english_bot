@@ -8,7 +8,6 @@ import time
 import keyboard as kb
 import func
 
-
 bot= Bot(token=os.environ.get('TOKEN'))
 dp = Dispatcher(bot)
 
@@ -40,7 +39,10 @@ async def echo_send(message : types.Message):
                 word=func.startlearn(message.from_id)
                 text="Тебе необходимо переводить слова. Будет 4 варианта ответа. Слово считается выученным при правильном ответе 5 раз подряд для новых слов и 1 раз для уже выученных. За 1 урок 50 слов. Мы считаем это нормой для 1 дня учёбы. Завтра мы напомним тебе о необходимости продолжить учёбу. Твои результаты мы будем хранить 3дня. Если ты за 3 дня нам не напишешь мы удалим твой прогресс."
                 await message.answer(text)
-                await message.answer("Как переводится: %s"% word[4], reply_markup=kb.learnword(word))
+                if word[5]==NULL:
+                    await message.answer("Как переводится: %s"% word[4], reply_markup=kb.learnword(word))
+                else:
+                    await message.answer("Как переводится: %s [%s]"%(word[4],word[5]), reply_markup=kb.learnword(word))
                 await message.delete()
                 return
             if message.text=='Переводчик':

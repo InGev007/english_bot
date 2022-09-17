@@ -3,7 +3,8 @@ __pycache__/
 .vscode/
 *.py[cod]
 *$py.class
-
+*.bat
+*sql
 # C extensions
 *.so
 utils/

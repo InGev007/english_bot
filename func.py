@@ -68,7 +68,7 @@ def startlearn(uid):
                 pass
             i+=1
     answ=randansw()
-    res = con.execute('SELECT en,ru,id FROM dictionary WHERE id IN (SELECT idd FROM tempdict WHERE idu=%s);'% uid)
+    res = con.execute('SELECT en,ru,id,transcription FROM dictionary WHERE id IN (SELECT idd FROM tempdict WHERE idu=%s);'% uid)
     res=res.fetchall()
     random.shuffle(res)
     answ.append(res[0][1])
@@ -76,6 +76,7 @@ def startlearn(uid):
     con.commit()
     random.shuffle(answ)
     answ.append(res[0][0])
+    answ.append(res[0][3])
     con.close()
     return answ
 
@@ -108,7 +109,7 @@ def nextlearn(uid, text):
         return ret,0
     else:
         random.shuffle(tempdict)
-        res = con.execute('SELECT en,ru,id FROM dictionary WHERE id=%s;'% tempdict[0][0])
+        res = con.execute('SELECT en,ru,id,transcription FROM dictionary WHERE id=%s;'% tempdict[0][0])
         res=res.fetchone()
         answ=randansw()
         answ.append(res[1])
@@ -116,7 +117,10 @@ def nextlearn(uid, text):
         con.commit()
         random.shuffle(answ)
         con.close()
-        ret=ret+res[0]
+        if res[3]==NULL:
+            ret=ret+res[0]
+        else:
+            ret=ret+res[0]+" ["+res[3]+"]"
         return ret, answ
 
 def undolearn(uid):

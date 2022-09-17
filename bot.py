@@ -7,9 +7,13 @@ import time
 
 import keyboard as kb
 import func
+import dbutil
+
 
 bot= Bot(token=os.environ.get('TOKEN'))
 dp = Dispatcher(bot)
+
+dbutil.checkandupdatedb()
 
 @dp.message_handler(commands=['start'])
 async def command_start(message : types.Message):

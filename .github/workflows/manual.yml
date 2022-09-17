@@ -41,7 +41,6 @@ jobs:
             rm -rf ./english_bot
             git clone https://github.com/InGev007/english_bot.git
             cd ./english_bot
-            rm -rf ./db
             mv -t ~/docker/english_bot /tmp/db
             export TOKEN=${{ secrets.TOKEN_TG }}
             docker-compose build

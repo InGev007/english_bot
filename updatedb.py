@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS "tempdict" (
 	"ok"	INTEGER DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+CREATE TABLE IF NOT EXISTS "admin" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"acces"	INTEGER DEFAULT 0,
+	PRIMARY KEY("id")
+);
 CREATE TABLE IF NOT EXISTS "t_dial" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"idu"	INTEGER NOT NULL,
@@ -28,6 +33,14 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"lastsend"	INTEGER DEFAULT 0,
 	PRIMARY KEY("id")
 );
+
+DROP TABLE IF EXISTS "db_info";
+CREATE TABLE IF NOT EXISTS "db_info" (
+	"key"	TEXT NOT NULL UNIQUE,
+	"text"	TEXT NOT NULL
+);
+INSERT INTO "db_info" ("key","text") VALUES ('version','0.1');
+INSERT INTO "db_info" ("key","text") VALUES ('0.1',"У нас новая версия v0.1\nЧто нового:\n -Ежедневные напоминания\n -Сообщения от админа\n -Сообщения из бота\n -Добавлена зарегистрированная комманда\n -Добавлены транскрипции(не все) \n -Обновлена база данных");
 DROP TABLE IF EXISTS "dictionary";
 CREATE TABLE IF NOT EXISTS "dictionary" (
 	"id"	INTEGER NOT NULL UNIQUE,

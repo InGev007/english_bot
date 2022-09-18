@@ -4,16 +4,18 @@ from aiogram.utils import executor
 import translators as ts
 import os
 import time
+import asyncio
+import aioschedule
 
 import keyboard as kb
 import func
 import dbutil
+import bot_message
 
 
 bot= Bot(token=os.environ.get('TOKEN'))
 dp = Dispatcher(bot)
 
-dbutil.checkandupdatedb()
 
 @dp.message_handler(commands=['start'])
 async def command_start(message : types.Message):
@@ -24,17 +26,20 @@ async def command_start(message : types.Message):
         await message.answer("Данный бот создан для изучения Английского языка. В нём вы найдете автоматический словарь который поможет вам запомнить основные слова. Набор правил анлийского языка и переводчик.", reply_markup=kb.startmenu)
         await message.delete()
         return
+@dp.message_handler(commands=['msg'])
+async def command_msg(message : types.Message):
+    if message.from_user.is_bot != True:
+        msg = message.text.strip('/msg ')
+        await bot_message.send_msg(bot, msg, message.from_id, message)
+        return
+@dp.message_handler(commands=['message'])
+async def command_msg(message : types.Message):
+    if message.from_user.is_bot != True:
+        msg = message.text.strip('/message ')
+        await bot_message.send_msg(bot, msg, message.from_id, message)
+        return
 @dp.message_handler()
 async def echo_send(message : types.Message):
-    if (int(time.strftime("%H"))>9)&(int(time.strftime("%H"))<21):
-        notactive=func.checkactive(message.from_id)
-        if len(notactive)!=0:
-            try:
-                for e in notactive:
-                    func.setstate(e[0], 0)
-                    func.undolearn(e[0])
-                    bot.send_message(e[0], "Продолжай изучать и повторять слова для успешного запоминания.", reply_markup=kb.startmenu)
-            except: pass
     if message.from_user.is_bot != True:
         user=[message.from_user.id, message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.language_code]
         state = func.checkstate(user)
@@ -102,4 +107,28 @@ async def echo_send(message : types.Message):
             await message.delete()
             return
 
-executor.start_polling(dp, skip_updates=True) 
+async def setup_bot_commands():
+    bot_commands = [
+        types.BotCommand(command="/start", description="Для сброса и возвращения в главное меню"),
+    ]
+    await bot.set_my_commands(bot_commands)
+
+async def scheduler():
+    aioschedule.every(1).minutes.do(send)
+    while True:
+        await aioschedule.run_pending()
+        await asyncio.sleep(1)
+
+async def on_startup(_):
+    dbutil.checkandupdatedb()
+    await setup_bot_commands()
+    await bot_message.send_msg(bot, "У нас новая версия v0.1\nЧто нового:\n -Ежедневные напоминания\n -Сообщения от админа\n -Сообщения из бота\n -Добавлена зарегистрированная комманда\n -Добавлены транскрипции(не все) \n -Обновлена база данных")
+    asyncio.create_task(scheduler())
+
+async def send():
+    await bot_message.reminders(bot)
+
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+    

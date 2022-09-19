@@ -1,9 +1,14 @@
 import sqlite3
-
+import os
 import updatedb
 
 def checkandupdatedb():
-    con = sqlite3.connect("./db/bot.db")
+    try:
+        con = sqlite3.connect("./db/bot.db")
+    except sqlite3.OperationalError:
+        os.mkdir('db')
+    finally:
+        con = sqlite3.connect("./db/bot.db")
     cur = con.cursor()
     res=con.executescript(updatedb.updatesql)
     con.commit()

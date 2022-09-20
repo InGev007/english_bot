@@ -3,7 +3,7 @@ version: "3.3"
 services:
   english_bot:
     build: ./
-    image: english_bot:latest
+    image: english_bot:test
     restart: always
     volumes:
       - ./db/:/usr/src/app/db/

@@ -4,7 +4,7 @@ services:
   english_bot:
     build: ./
     image: english_bot:test
-    restart: always
+    restart: "no"
     volumes:
       - ./db/:/usr/src/app/db/
     environment:

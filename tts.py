@@ -10,7 +10,7 @@ async def checkandupdatevoice(bot, idu):
   res = cur.execute('SELECT id, en FROM dictionary WHERE voice is NULL LIMIT 2')
   res = res.fetchall()
   if len(res)!=0:
-    for word in row:
+    for word in res:
       mytext = word[1]
       idd = word[0]
       language = 'en'
@@ -26,6 +26,6 @@ async def checkandupdatevoice(bot, idu):
       voice = InputFile("./speech/%s.mp3"%idd)
       voice_send = await bot.send_audio(chat_id=idu, audio=voice, caption="текст1",title=mytext) # этот метод поможет получить file_id
       voice_id = voice_send['audio'][0]['file_id'] # это сам file_id
-      res = cur.execute('UPDATE dictionary SET voice=%s WHERE id=%s;'% (voice_id,idd))
+      sql = cur.execute('UPDATE dictionary SET voice=%s WHERE id=%s;'% (voice_id,idd))
       con.commit()
   con.close()

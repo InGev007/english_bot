@@ -1,4 +1,4 @@
-name: Deploy Main
+name: Deploy Test
 
 
 on:
@@ -34,10 +34,12 @@ jobs:
           username: ${{ secrets.SSH_LOGIN }}
           password: ${{ secrets.SSH_PASS }}
           script: |
+            rm -rf ~/docker/test_english_bot
             cd ./docker
             mkdir test_english_bot
             cd ./test_english_bot
             git clone https://github.com/InGev007/english_bot.git
+            cd ./english_bot
             git checkout new_tts
             cp ~/docker/english_bot/db/ ~/docker/test_english_bot/english_bot/ -r
             export TOKEN_TEST=${{ secrets.TG_TOKEN_TEST }}

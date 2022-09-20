@@ -12,8 +12,9 @@ import func
 import dbutil
 import bot_message
 import tts
+import bot_dictionary
 
-bot= Bot(token=os.environ.get('TOKEN_TEST'))
+bot= Bot(token=os.environ.get('TOKEN'))
 dp = Dispatcher(bot)
 
 
@@ -38,11 +39,18 @@ async def command_msg(message : types.Message):
         msg = message.text.strip('/message ')
         await bot_message.send_msg(bot, msg, message.from_id, message)
         return
-@dp.message_handler(commands=['voice'])
+@dp.message_handler(commands=['update_voice'])
 async def command_msg(message : types.Message):
     if message.from_user.is_bot != True:
         await tts.checkandupdatevoice(bot, message.from_id)
         return
+@dp.message_handler(commands=['random'])
+async def command_msg(message : types.Message):
+    if message.from_user.is_bot != True:
+        await tts.send_random(bot, message.from_id)
+        return
+
+
 @dp.message_handler()
 async def echo_send(message : types.Message):
     if message.from_user.is_bot != True:
@@ -51,14 +59,10 @@ async def echo_send(message : types.Message):
         if state==0:
             if message.text=='Учить слова':
                 func.setstate(message.from_id, 1)
-                word=func.startlearn(message.from_id)
-                text="Тебе необходимо переводить слова. Будет 4 варианта ответа. Слово считается выученным при правильном ответе 5 раз подряд для новых слов и 1 раз для уже выученных. За 1 урок 50 слов. Мы считаем это нормой для 1 дня учёбы. Завтра мы напомним тебе о необходимости продолжить учёбу. Твои результаты мы будем хранить 3дня. Если ты за 3 дня нам не напишешь мы удалим твой прогресс."
-                await message.answer(text)
-                if word[5]==None:
-                    await message.answer("Как переводится: %s"% word[4], reply_markup=kb.learnword(word))
-                else:
-                    await message.answer("Как переводится: %s [%s]"%(word[4],word[5]), reply_markup=kb.learnword(word))
                 await message.delete()
+                # text="Тебе необходимо переводить слова. Будет 4 варианта ответа. Слово считается выученным при правильном ответе 5 раз подряд для новых слов и 1 раз для уже выученных. За 1 урок 50 слов. Мы считаем это нормой для 1 дня учёбы. Завтра мы напомним тебе о необходимости продолжить учёбу. Твои результаты мы будем хранить 3дня. Если ты за 3 дня нам не напишешь мы удалим твой прогресс."
+                # await bot.send_message(message.from_id, text)
+                await bot_dictionary.startlearn(bot, message)
                 return
             if message.text=='Переводчик':
                 func.setstate(message.from_id, 2)
@@ -76,12 +80,7 @@ async def echo_send(message : types.Message):
                 await message.delete()
                 return
             else:
-                text,answ = func.nextlearn(message.from_id, message.text)
-                if answ==0:
-                    await message.answer(text, reply_markup=kb.startmenu)
-                else:
-                    await message.answer(text, reply_markup=kb.learnword(answ))
-                await message.delete()
+                await bot_dictionary.nextlearn(bot, message)
                 return
         elif state==2:
             if message.text=='Англо-Русский':
@@ -112,9 +111,11 @@ async def echo_send(message : types.Message):
             await message.delete()
             return
 
+
 async def setup_bot_commands():
     bot_commands = [
         types.BotCommand(command="/start", description="Для сброса и возвращения в главное меню"),
+        types.BotCommand(command="/random", description="Случайное слово"),
     ]
     await bot.set_my_commands(bot_commands)
 

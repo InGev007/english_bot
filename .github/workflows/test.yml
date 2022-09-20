@@ -33,6 +33,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_LOGIN }}
           password: ${{ secrets.SSH_PASS }}
+          #cp ~/docker/english_bot/db/ ~/docker/test_english_bot/english_bot/ -r
           script: |
             cd ~/docker/test_english_bot/english_bot
             docker-compose down
@@ -44,7 +45,6 @@ jobs:
             git clone https://github.com/InGev007/english_bot.git
             cd ./english_bot
             git checkout new_tts
-            cp ~/docker/english_bot/db/ ~/docker/test_english_bot/english_bot/ -r
             export TOKEN_TEST=${{ secrets.TG_TOKEN_TEST }}
             docker-compose build
             docker-compose up -d

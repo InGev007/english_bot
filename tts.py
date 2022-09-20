@@ -26,7 +26,7 @@ async def checkandupdatevoice(bot, idu):
       voice = InputFile("./speech/%s.mp3"%idd)
       voice_send = await bot.send_audio(chat_id=idu, audio=voice, caption="текст1", performer=mytext, title=mytext)
       voice_id = voice_send['audio']['file_id']
-      sql = cur.execute('UPDATE dictionary SET voice=%s WHERE id=%s;'% (voice_id,idd))
+      sql = cur.execute('UPDATE dictionary SET voice="%s" WHERE id=%s;'% (voice_id,idd))
       con.commit()
   dbutil.dumpdb()
   con.close()

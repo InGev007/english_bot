@@ -34,6 +34,9 @@ jobs:
           username: ${{ secrets.SSH_LOGIN }}
           password: ${{ secrets.SSH_PASS }}
           script: |
+            cd ~/docker/test_english_bot/english_bot
+            docker-compose down
+            cd ~
             rm -rf ~/docker/test_english_bot
             cd ./docker
             mkdir test_english_bot

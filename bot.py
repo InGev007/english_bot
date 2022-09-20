@@ -38,6 +38,11 @@ async def command_msg(message : types.Message):
         msg = message.text.strip('/message ')
         await bot_message.send_msg(bot, msg, message.from_id, message)
         return
+@dp.message_handler(commands=['voice'])
+async def command_msg(message : types.Message):
+    if message.from_user.is_bot != True:
+        await tts.checkandupdatevoice(bot, message.from_id)
+        return
 @dp.message_handler()
 async def echo_send(message : types.Message):
     if message.from_user.is_bot != True:
@@ -121,7 +126,6 @@ async def scheduler():
 
 async def on_startup(_):
     dbutil.checkandupdatedb()
-    tts.checkandupdatevoice(bot)
     await setup_bot_commands()
     await bot_message.send_msg(bot, "У нас новая версия v0.1\nЧто нового:\n -Ежедневные напоминания\n -Сообщения от админа\n -Сообщения из бота\n -Добавлена зарегистрированная комманда\n -Добавлены транскрипции(не все) \n -Обновлена база данных")
     asyncio.create_task(scheduler())

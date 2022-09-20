@@ -38,7 +38,7 @@ jobs:
             cd ~/docker/test_english_bot/english_bot
             docker-compose down
             cd ~
-            rm -rf ~/docker/test_english_bot
+            sudo rm -rf ~/docker/test_english_bot
             cd ./docker
             mkdir test_english_bot
             cd ./test_english_bot

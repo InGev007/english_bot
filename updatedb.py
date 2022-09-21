@@ -192,8 +192,9 @@ CREATE TABLE IF NOT EXISTS "db_info" (
 	"key"	TEXT NOT NULL UNIQUE,
 	"text"	TEXT NOT NULL
 );
-INSERT OR IGNORE INTO "db_info" ("key","text") VALUES ('version','0.1');
-INSERT OR IGNORE INTO "db_info" ("key","text") VALUES ('0.1',"У нас новая версия v0.1\nЧто нового:\n -Ежедневные напоминания\n -Сообщения от админа\n -Сообщения из бота\n -Добавлена зарегистрированная комманда\n -Добавлены транскрипции(не все) \n -Обновлена база данных");
+INSERT INTO "db_info" ("key","text") VALUES ('version','0.2');
+INSERT INTO "db_info" ("key","text") VALUES ('0.1',"У нас новая версия v0.1\nЧто нового:\n -Ежедневные напоминания\n -Сообщения от админа\n -Сообщения из бота\n -Добавлена зарегистрированная комманда\n -Добавлены транскрипции(не все) \n -Обновлена база данных");
+INSERT INTO "db_info" ("key","text") VALUES ('0.2',"У нас новая версия v0.2\nЧто нового:\n -Добавлено произношение слов\n -Добавлена новая комманда");
 DROP TABLE IF EXISTS "dictionary";
 CREATE TABLE IF NOT EXISTS "dictionary" (
 	"id"	INTEGER NOT NULL UNIQUE,

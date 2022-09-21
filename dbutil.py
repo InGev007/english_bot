@@ -16,7 +16,7 @@ def checkandupdatedb():
     
 def dumpdb():
     con = sqlite3.connect("./db/bot.db")
-    with open('dump.sql', 'w', encoding='UTF8') as f:
+    with open('./db/dump.sql', 'w', encoding='UTF8') as f:
         for line in con.iterdump():
             f.write('%s\n' % line)
     con.close()

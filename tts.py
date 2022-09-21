@@ -15,6 +15,8 @@ async def checkandupdatevoice(bot, idu):
       await bot.send_message(idu, "У Вас нет досупа.")
       con.close()
       return
+  res = cur.execute('UPDATE dictionary SET voice=NULL')
+  con.commit()
   res = cur.execute('SELECT id, en FROM dictionary WHERE voice is NULL')
   res = res.fetchall()
   if len(res)!=0:

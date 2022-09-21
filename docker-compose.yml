@@ -3,9 +3,9 @@ version: "3.3"
 services:
   english_bot:
     build: ./
-    image: english_bot:test
-    restart: "no"
+    image: english_bot:latest
+    restart: always
     volumes:
       - ./db/:/usr/src/app/db/
     environment:
-      - TOKEN_TEST
+      - TOKEN

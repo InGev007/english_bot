@@ -128,7 +128,7 @@ async def scheduler():
 async def on_startup(_):
     dbutil.checkandupdatedb()
     await setup_bot_commands()
-    await bot_message.send_msg(bot, "У нас новая версия v0.2\nЧто нового:\n -Добавлено произношение слов\n -Добавлена новая комманда")
+    # await bot_message.send_msg(bot, "У нас новая версия v0.2\nЧто нового:\n -Добавлено произношение слов\n -Добавлена новая комманда")
     asyncio.create_task(scheduler())
 
 async def send():
